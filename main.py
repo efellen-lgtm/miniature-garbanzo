@@ -1,7 +1,6 @@
 from drafter import *
 from dataclasses import dataclass, field
 
-theme: Merlot
 @dataclass
 class Yield:
     name: str
