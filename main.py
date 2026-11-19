@@ -412,7 +412,7 @@ def percent_yield_problem(state: State) -> Page:
 
 @route
 def index(state: State) -> Page:
-    return Page(state, [
+    return Page(state, [Header("Process Chemical Equations")
         "What do you want to calculate?",
         Button("Moles of a Substance", "moles_problem"),
         Button("Limiting Reactant", "limiting_reactant_problem"),
