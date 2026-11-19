@@ -141,6 +141,13 @@ def display_moles(state: State) -> Page:
 
 @route
 def calculate_moles(state: State) -> Page:
+    if state.calculation in ["theoretical_yield", "percent_yield", "limiting_reactant"]:
+        for reactant in state.reactants:
+            if reactant.moles is None:
+                return Page(state, [
+                    "Please enter the actual mole amount for every reactant.",
+                    Button("Go Back", "input_part")
+                ])
     success = calculate_missing_moles(state)
 
     if not success:
@@ -391,21 +398,33 @@ def process_equation(state: State, reactants_input: str, products_input: str) ->
 
 @route
 def moles_problem(state: State) -> Page:
+    state.yields = []
+    state.current_index = 0
+    state.current_type = "reactant"
     state.calculation = "moles"
     return calculate_equation(state)
 
 @route
 def limiting_reactant_problem(state: State) -> Page:
+    state.yields = []
+    state.current_index = 0
+    state.current_type = "reactant"
     state.calculation = "limiting_reactant"
     return calculate_equation(state)
 
 @route
 def theoretical_yield_problem(state: State) -> Page:
+    state.yields = []
+    state.current_index = 0
+    state.current_type = "reactant"
     state.calculation = "theoretical_yield"
     return calculate_equation(state)
 
 @route
 def percent_yield_problem(state: State) -> Page:
+    state.yields = []
+    state.current_index = 0
+    state.current_type = "reactant"
     state.calculation = "percent_yield"
     return calculate_equation(state)
     
