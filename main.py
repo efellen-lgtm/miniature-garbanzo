@@ -141,22 +141,28 @@ def display_moles(state: State) -> Page:
 
 @route
 def calculate_moles(state: State) -> Page:
-    if state.calculation in ["theoretical_yield", "percent_yield", "limiting_reactant"]:
+
+    if state.calculation in [
+        "theoretical_yield",
+        "percent_yield",
+        "limiting_reactant"
+    ]:
         for reactant in state.reactants:
             if reactant.moles is None:
                 return Page(state, [
                     "Please enter the actual mole amount for every reactant.",
                     Button("Go Back", "input_part")
                 ])
-    success = calculate_missing_moles(state)
-
-    if not success:
-        return Page(state, [
-            "You must enter at least one known mole amount.",
-            Button("Go Back", "input_part")
-        ])
 
     if state.calculation == "moles":
+        success = calculate_missing_moles(state)
+
+        if not success:
+            return Page(state, [
+                "You must enter at least one known mole amount.",
+                Button("Go Back", "input_part")
+            ])
+
         return display_moles(state)
 
     elif state.calculation == "theoretical_yield":
@@ -198,6 +204,11 @@ def input_molar_mass(state: State) -> Page:
 @route
 def save_molar_mass(state: State, molar_mass_input: str) -> Page:
     molar_mass = float(molar_mass_input)
+    if molar_mass <= 0:
+        return Page(state, [
+            "Molar mass must be greater than zero.",
+            Button("Go Back", "input_molar_mass")
+            ])
 
     product = state.products[state.current_index]
     product.molar_mass = molar_mass
@@ -215,6 +226,10 @@ def calculate_theoretical_yield(state: State) -> Page:
     limiting_reactant = calculate_lower_amount(state.reactants)
 
     if limiting_reactant is None:
+        if limiting_reactant.moles <= 0:
+            return Page(state, [
+                "The limiting reactant must have more than zero moles."
+            ])
         return Page(state, [
             "Enter the mole amounts for your reactants first."
         ])
@@ -258,6 +273,11 @@ def input_actual_yield(state: State) -> Page:
 @route
 def save_actual_yield(state: State, actual_yield_input: str) -> Page:
     actual_yield = float(actual_yield_input)
+    if actual_yield < 0:
+        return Page(state, [
+            "Actual yield cannot be negative.",
+            Button("Go Back", "input_actual_yield")
+        ])
 
     product_yield = state.yields[state.current_index]
 
