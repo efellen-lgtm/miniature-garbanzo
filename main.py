@@ -1,7 +1,7 @@
 from drafter import *
 from dataclasses import dataclass, field
 
-set_website_style("matcha")
+set_website_style("retro")
 
 @dataclass
 class Yield:
