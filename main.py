@@ -1,6 +1,8 @@
 from drafter import *
 from dataclasses import dataclass, field
 
+set_website_style("sakura")
+
 @dataclass
 class Yield:
     name: str
